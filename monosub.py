@@ -1,7 +1,7 @@
 import sys
 
 referkey = "abcdefghijklmnopqrstuvwxyz"
-alphakey = "xwvacfgmldkghdobreisntuoyp"
+alphakey = "xwvacfgmldkghjobreisntuoyp"
 
 fileout = open("monosubout.txt", "w")
 
@@ -42,10 +42,8 @@ for i in range(0, len(ciphertext)):
  
     res = alphakey[c1]
 
-    if  alphakey[c1] != referkey[c1] or alphakey[c1] == "k" or alphakey[c1] == "y" or alphakey[c1] == "f":
+    if  delta == 65:
         res = res.upper()
-    elif len(sys.argv) == 2:
-        res = "_"
 
     print(res, end="")
     fileout.write(res)
