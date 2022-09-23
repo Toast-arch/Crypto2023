@@ -12,9 +12,6 @@ if len(sys.argv) > 1:
 else:
     sys.exit()
 
-if len(sys.argv) > 2:
-    key = sys.argv[2]
-
 def normalize(c: int) -> int:
     if c < 0:
         return c + 25
@@ -42,7 +39,7 @@ for i in range(0, len(ciphertext)):
  
     res = alphakey[c1]
 
-    if  delta == 65:
+    if delta == 65:
         res = res.upper()
 
     print(res, end="")
