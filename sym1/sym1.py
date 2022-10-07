@@ -4,7 +4,6 @@ import hashlib
 from Crypto.Cipher import AES
 
 plaintext = "I was lost, but now I'm found..."
-plaintfae = "I was lost, but jesus found me"
 
 bs = AES.block_size
 key = hashlib.sha256("omgwtfbbq".encode()).digest()
