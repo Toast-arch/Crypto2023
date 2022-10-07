@@ -1,5 +1,7 @@
 import base64
+import codecs
 import hashlib
+from operator import xor
 from pydoc import plain
 from tabnanny import check
 
@@ -39,25 +41,22 @@ block2 = "c1cf6db4524aac04e222853969367e0d"
 full = block1 + block2
 
 ogtexthex = "4920776173206c6f73742c2062757420"
-
 #got this by encrypting with iv = 00000000
 blockt = "2687a530560918beba65017710fd5f02"
 
-hugot = AES.new(key, AES.MODE_ECB)
-output = hugot.decrypt(bytes.fromhex(blockt))
-hexoutput = ''.join(format(x, '02x') for x in output)
-possibleiv = bytes([_a ^ _b for _a, _b in zip(output, bytes.fromhex(ogtexthex))]).decode()
-
-print(possibleiv)
+#hugot = AES.new(key, AES.MODE_ECB)
+#output = hugot.decrypt(bytes.fromhex(blockt))
+#hexoutput = ''.join(format(x, '02x') for x in output)
+#possibleiv = bytes([_a ^ _b for _a, _b in zip(output, bytes.fromhex(ogtexthex))]).decode()
 
 def check_result(plaintext: str, ivt: str, expected: str):
     keyt = hashlib.sha256("omgwtfbbq".encode()).digest()
-    tmpaes = AES.new(keyt, AES.MODE_CBC, ivt.encode())
+    tmpaes = AES.new(keyt, AES.MODE_CBC, bytes.fromhex(ivt))
     out = tmpaes.encrypt(plaintext.encode())
     return ''.join(format(x, '02x') for x in out) == expected
 
-print(check_result(ogplaintext_block1, possibleiv, blockt))
-exit()
+#print(check_result(ogplaintext_block1, possibleiv, blockt))
+
 #print(''.join(format(x, '02x') for x in ciphertext))
 #print(ogciphertexthex)
 
@@ -72,6 +71,10 @@ def replace_missing_values(ogstring , i1 = 0, i2= 0, i3= 0, i4= 0, i5= 0):
     ogstringlist[18] = hexcharlist[i5]
     return ''.join(ogstringlist)
 
+#print("I was lost, but ")
+#print("4920776173206c6f73742c2062757420")
+#print(''.join(format(x, '02x') for x in ogplaintext_block1.encode()))
+
 
 for i1 in range(0, 16):
     for i2 in range(0, 16):
@@ -80,6 +83,33 @@ for i1 in range(0, 16):
                 for i5 in range(0, 16):
                     block1 = replace_missing_values(block1, i1, i2, i3, i4, i5)
 
+                    #print("TRYING {:02d} {:02d} {:02d} {:02d} {:02d} ::: {}".format(i1, i2, i3, i4, i5, block1))
+
+                    key = hashlib.sha256("omgwtfbbq".encode()).digest()
                     hugo2 = AES.new(key, AES.MODE_ECB)
                     output = hugo2.decrypt(bytes.fromhex(block1))
-                    #print(''.join(format(x, '02x') for x in output))
+                    hexoutput = ''.join(format(x, '02x') for x in output)
+                    #print("DECRYPT ECB           ::: {}".format(hexoutput))
+                    
+                    #print(xor_strings(hexoutput, ogtexthex))
+                    #xorstr = xor_strings(hexoutput, ogtexthex)
+                    #print("GONNA DO XOR")
+                    #print(hexoutput)
+                    #print(ogtexthex)
+                    possibleivhexstr = hex(int(block1, 16) ^ int(hexoutput, 16))[2:]
+                    while len(possibleivhexstr) < 32:
+                        possibleivhexstr = "0" + possibleivhexstr
+                    #print(possibleivhexstr)
+
+                    #print("XOR RESULT            ::: " + possibleivhexstr)
+                    #print(codecs.decode(bytes(possibleivhexstr, encoding='utf-8'), "hex"))
+                    #print(''.join(format(x, '02x') for x in xorstr.encode()))
+            
+                    #print(bytes([_a ^ _b for _a, _b in zip(output, bytes.fromhex(ogtexthex))]).decode())
+
+
+                    if check_result(ogplaintext_block1, possibleivhexstr, block1):
+                        print(possibleivhexstr)
+                        exit()
+                    #print("DONE")
+
