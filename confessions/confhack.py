@@ -1,0 +1,46 @@
+import hashlib
+import string
+
+alphanumpunc = list(string.ascii_letters + string.punctuation)
+
+print(alphanumpunc)
+hash_list = [
+"df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+"567d6942cf5211b4321ec51929f02f900a56260d92e6df24be91c909dedd8adb",
+"d977af2aeb54b20524848814f0875ea14ba33357ba2830ad284ee20e4430c192",
+"951cb865c172014c46cb9c697d08bf53e6e557837633a082c09839800d0740c4",
+"2a45cdbf2a455215dd1fd8cd18fd9bf20430d3ab8db70610c6ffe0cd371d583a",
+"56e826d7879ee9a1fbfd6f04807e3596cf71f54f1f0760c14d6dc5e17eb7f374",
+"b54db4a2f1c8b25ae2426ff5eca264822969eeef585333576bd5abf44a9eff16",
+"90da3697cea041f4c7780b41dda39af28f36ed6d1a432130659c79cbff468068",
+"4a7d396401181a913e2f0aa496be1dfddb5ed37789ad13798d0e78bd20f4b251",
+"70da4dd08191dc2b1179445b472d1fcd7527f8ca05e04c6e74c9359b25426eb9",
+"e26930041e0664f03950d3a27d171efa539bcda61a5b5c8b054f8eae42e1915f",
+"dcbf952ec6db65d50a8a00c8aadd4962df0f12062fc1d8c3987d905d94d54225",
+"c8450e3c96597783d701496c88594a4ea6e269b374a68ac5d880955e251d7160",
+"77b42655c23cbf66148a2bf030fc5150cc24fd42b2e42741d2b1143655bbbb56",
+"e4f5852f5e1f8cc791d2b44d7a3c98d5af3362c05bbc0a5fa01166e96dfa650c",
+"9c8a1073feebf9a46e28d780a22c4dd3ade05867bd5965abb41401ee834551b7",
+"fdc2e0b876969a97e088fa8c7f2bdef25094c34f2e873508a051d17f5d25c7eb",
+"054173cc0fd736cade161a014b0742095d6f2896cf41a9265ef10c8ed5a4ca04",
+"600a5d1a7e148c5f4cc52e4a9868b75ec11a17c61922a1829c4369301d2cdb4a",
+"3b549cb993cbeb1f6079b99fc082f766a230b50f536e64a7591bbb28a1e2df12",
+"0928ecbe9f7438802d8259a7cfd2d4478f48f2204153987cacf6ea04860f602e",
+"07a341cd3575ee2c7456ed4a3ec412cb7ab885503158fbb38e992251808f89a9",
+"2e4e9de246770a1159a6ecc41c62d861d26cc0dfc1c45f60cd827072ccd9eb23"
+]
+
+result = ""
+
+m = hashlib.sha256()
+m.update("B".encode())
+
+for el in hash_list:
+    print("HASH ::: {}".format(el))
+    for alpha in alphanumpunc:
+        m = hashlib.sha256()
+        m.update((result + alpha).encode())
+        if m.hexdigest() == el:
+            result += alpha
+            print("NEW RESULT ::: {}".format(result))
+            break
